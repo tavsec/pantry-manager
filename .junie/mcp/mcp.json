@@ -1,0 +1,11 @@
+{
+    "mcpServers": {
+        "laravel-boost": {
+            "command": "/Users/timotejavsec/Library/Application Support/Herd/bin/php84",
+            "args": [
+                "/Users/timotejavsec/Documents/Projects/pantry-manager/artisan",
+                "boost:mcp"
+            ]
+        }
+    }
+}
