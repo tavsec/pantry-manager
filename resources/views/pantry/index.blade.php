@@ -27,13 +27,13 @@
                     <!-- Search -->
                     <div>
                         <label for="search" class="block text-sm font-medium text-gray-700">Search</label>
-                        <input type="text" name="search" id="search" value="{{ request('search') }}" placeholder="Search by name..." class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                        <input type="text" name="search" id="search" value="{{ request('search') }}" placeholder="Search by name..." class="mt-1 block w-full px-4 py-3 rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                     </div>
 
                     <!-- Category Filter -->
                     <div>
                         <label for="category_id" class="block text-sm font-medium text-gray-700">Category</label>
-                        <select name="category_id" id="category_id" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                        <select name="category_id" id="category_id" class="mt-1 block w-full px-4 py-3 rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                             <option value="">All Categories</option>
                             @foreach ($categories as $cat)
                                 <option value="{{ $cat->id }}" {{ request('category_id') == $cat->id ? 'selected' : '' }}>
@@ -46,7 +46,7 @@
                     <!-- Location Filter -->
                     <div>
                         <label for="location_id" class="block text-sm font-medium text-gray-700">Location</label>
-                        <select name="location_id" id="location_id" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                        <select name="location_id" id="location_id" class="mt-1 block w-full px-4 py-3 rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                             <option value="">All Locations</option>
                             @foreach ($locations as $loc)
                                 <option value="{{ $loc->id }}" {{ request('location_id') == $loc->id ? 'selected' : '' }}>
@@ -59,7 +59,7 @@
                     <!-- Expiration Status Filter -->
                     <div>
                         <label for="expiration_status" class="block text-sm font-medium text-gray-700">Status</label>
-                        <select name="expiration_status" id="expiration_status" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                        <select name="expiration_status" id="expiration_status" class="mt-1 block w-full px-4 py-3 rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                             <option value="">All Items</option>
                             <option value="expired" {{ request('expiration_status') == 'expired' ? 'selected' : '' }}>Expired</option>
                             <option value="expiring_soon" {{ request('expiration_status') == 'expiring_soon' ? 'selected' : '' }}>Expiring Soon</option>
@@ -69,7 +69,7 @@
                     <!-- Sort -->
                     <div>
                         <label for="sort_by" class="block text-sm font-medium text-gray-700">Sort By</label>
-                        <select name="sort_by" id="sort_by" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                        <select name="sort_by" id="sort_by" class="mt-1 block w-full px-4 py-3 rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                             <option value="created_at" {{ request('sort_by') == 'created_at' ? 'selected' : '' }}>Date Added</option>
                             <option value="name" {{ request('sort_by') == 'name' ? 'selected' : '' }}>Name</option>
                             <option value="expiration_date" {{ request('sort_by') == 'expiration_date' ? 'selected' : '' }}>Expiration Date</option>

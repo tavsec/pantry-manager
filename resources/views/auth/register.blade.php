@@ -39,65 +39,47 @@
 
             <div class="space-y-4 rounded-md shadow-sm">
                 <div>
-                    <label for="name" class="block text-sm font-medium text-gray-700">
-                        Full Name
-                    </label>
-                    <input
-                        id="name"
+                    <x-text-input
                         name="name"
                         type="text"
+                        label="Full Name"
+                        placeholder="John Doe"
                         autocomplete="name"
                         required
-                        value="{{ old('name') }}"
-                        class="mt-1 block w-full appearance-none rounded-lg border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm @error('name') border-red-300 @enderror"
-                        placeholder="John Doe"
-                    >
+                    />
                 </div>
 
                 <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700">
-                        Email address
-                    </label>
-                    <input
-                        id="email"
+                    <x-text-input
                         name="email"
                         type="email"
+                        label="Email address"
+                        placeholder="you@example.com"
                         autocomplete="email"
                         required
-                        value="{{ old('email') }}"
-                        class="mt-1 block w-full appearance-none rounded-lg border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm @error('email') border-red-300 @enderror"
-                        placeholder="you@example.com"
-                    >
+                    />
                 </div>
 
                 <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700">
-                        Password
-                    </label>
-                    <input
-                        id="password"
+                    <x-text-input
                         name="password"
                         type="password"
+                        label="Password"
+                        placeholder="Minimum 8 characters"
                         autocomplete="new-password"
                         required
-                        class="mt-1 block w-full appearance-none rounded-lg border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm @error('password') border-red-300 @enderror"
-                        placeholder="Minimum 8 characters"
-                    >
+                    />
                 </div>
 
                 <div>
-                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700">
-                        Confirm Password
-                    </label>
-                    <input
-                        id="password_confirmation"
+                    <x-text-input
                         name="password_confirmation"
                         type="password"
+                        label="Confirm Password"
+                        placeholder="Re-enter your password"
                         autocomplete="new-password"
                         required
-                        class="mt-1 block w-full appearance-none rounded-lg border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                        placeholder="Re-enter your password"
-                    >
+                    />
                 </div>
             </div>
 

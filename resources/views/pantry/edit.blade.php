@@ -45,15 +45,20 @@
 
                 <!-- Item Name -->
                 <div>
-                    <label for="name" class="block text-sm font-medium text-gray-700">Item Name *</label>
-                    <input type="text" name="name" id="name" value="{{ old('name', $pantryItem->name) }}" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('name') border-red-300 @enderror">
+                    <x-text-input
+                        name="name"
+                        type="text"
+                        label="Item Name"
+                        :value="$pantryItem->name"
+                        required
+                    />
                 </div>
 
                 <!-- Category and Location -->
                 <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                     <div>
                         <label for="category_id" class="block text-sm font-medium text-gray-700">Category</label>
-                        <select name="category_id" id="category_id" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('category_id') border-red-300 @enderror">
+                        <select name="category_id" id="category_id" class="mt-1 block w-full px-4 py-3 rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('category_id') border-red-300 @enderror">
                             <option value="">Select a category (optional)</option>
                             @foreach ($categories as $category)
                                 <option value="{{ $category->id }}" {{ old('category_id', $pantryItem->category_id) == $category->id ? 'selected' : '' }}>
@@ -68,7 +73,7 @@
 
                     <div>
                         <label for="location_id" class="block text-sm font-medium text-gray-700">Storage Location</label>
-                        <select name="location_id" id="location_id" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('location_id') border-red-300 @enderror">
+                        <select name="location_id" id="location_id" class="mt-1 block w-full px-4 py-3 rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('location_id') border-red-300 @enderror">
                             <option value="">Select a location (optional)</option>
                             @foreach ($locations as $location)
                                 <option value="{{ $location->id }}" {{ old('location_id', $pantryItem->location_id) == $location->id ? 'selected' : '' }}>
@@ -85,13 +90,20 @@
                 <!-- Quantity and Unit -->
                 <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                     <div>
-                        <label for="quantity" class="block text-sm font-medium text-gray-700">Quantity *</label>
-                        <input type="number" name="quantity" id="quantity" value="{{ old('quantity', $pantryItem->quantity) }}" step="0.01" min="0" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('quantity') border-red-300 @enderror">
+                        <x-text-input
+                            name="quantity"
+                            type="number"
+                            label="Quantity"
+                            :value="$pantryItem->quantity"
+                            step="0.01"
+                            min="0"
+                            required
+                        />
                     </div>
 
                     <div>
                         <label for="unit" class="block text-sm font-medium text-gray-700">Unit *</label>
-                        <select name="unit" id="unit" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('unit') border-red-300 @enderror">
+                        <select name="unit" id="unit" required class="mt-1 block w-full px-4 py-3 rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('unit') border-red-300 @enderror">
                             <option value="">Select a unit</option>
                             <option value="pieces" {{ old('unit', $pantryItem->unit) == 'pieces' ? 'selected' : '' }}>pieces</option>
                             <option value="kg" {{ old('unit', $pantryItem->unit) == 'kg' ? 'selected' : '' }}>kg</option>
@@ -110,13 +122,23 @@
                 <!-- Purchase Date and Expiration Date -->
                 <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                     <div>
-                        <label for="purchase_date" class="block text-sm font-medium text-gray-700">Purchase Date *</label>
-                        <input type="date" name="purchase_date" id="purchase_date" value="{{ old('purchase_date', $pantryItem->purchase_date->format('Y-m-d')) }}" required max="{{ date('Y-m-d') }}" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('purchase_date') border-red-300 @enderror">
+                        <x-text-input
+                            name="purchase_date"
+                            type="date"
+                            label="Purchase Date"
+                            :value="$pantryItem->purchase_date->format('Y-m-d')"
+                            :max="date('Y-m-d')"
+                            required
+                        />
                     </div>
 
                     <div>
-                        <label for="expiration_date" class="block text-sm font-medium text-gray-700">Expiration Date</label>
-                        <input type="date" name="expiration_date" id="expiration_date" value="{{ old('expiration_date', $pantryItem->expiration_date?->format('Y-m-d')) }}" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('expiration_date') border-red-300 @enderror">
+                        <x-text-input
+                            name="expiration_date"
+                            type="date"
+                            label="Expiration Date"
+                            :value="$pantryItem->expiration_date?->format('Y-m-d')"
+                        />
                         <p class="mt-1 text-xs text-gray-500">Optional, but recommended</p>
                     </div>
                 </div>
@@ -124,7 +146,7 @@
                 <!-- Notes -->
                 <div>
                     <label for="notes" class="block text-sm font-medium text-gray-700">Notes</label>
-                    <textarea name="notes" id="notes" rows="3" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('notes') border-red-300 @enderror" placeholder="Cooking notes, dietary info, etc.">{{ old('notes', $pantryItem->notes) }}</textarea>
+                    <textarea name="notes" id="notes" rows="3" class="mt-1 block w-full px-4 py-3 rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('notes') border-red-300 @enderror" placeholder="Cooking notes, dietary info, etc.">{{ old('notes', $pantryItem->notes) }}</textarea>
                 </div>
 
                 <!-- Photo Upload -->

@@ -4,7 +4,8 @@
       "mcp__laravel-boost__application-info",
       "Bash(php artisan:*)",
       "mcp__laravel-boost__database-schema",
-      "Bash(vendor/bin/pint:*)"
+      "Bash(vendor/bin/pint:*)",
+      "Bash(npm run build:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

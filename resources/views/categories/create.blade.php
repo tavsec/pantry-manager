@@ -21,27 +21,24 @@
 
                 <!-- Name -->
                 <div>
-                    <label for="name" class="block text-sm font-medium text-gray-700">
-                        Category Name <span class="text-red-500">*</span>
-                    </label>
-                    <input type="text" name="name" id="name" value="{{ old('name') }}" required
-                           class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('name') border-red-300 @enderror">
-                    @error('name')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                    <x-text-input
+                        name="name"
+                        type="text"
+                        label="Category Name"
+                        required
+                    />
                 </div>
 
                 <!-- Icon -->
                 <div>
-                    <label for="icon" class="block text-sm font-medium text-gray-700">
-                        Icon (Emoji)
-                    </label>
-                    <input type="text" name="icon" id="icon" value="{{ old('icon') }}" placeholder="e.g., 🌾 or 🥛" maxlength="10"
-                           class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('icon') border-red-300 @enderror">
+                    <x-text-input
+                        name="icon"
+                        type="text"
+                        label="Icon (Emoji)"
+                        placeholder="e.g., 🌾 or 🥛"
+                        maxlength="10"
+                    />
                     <p class="mt-1 text-xs text-gray-500">Optional: Add an emoji to represent this category</p>
-                    @error('icon')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
                 </div>
 
                 <!-- Color -->
