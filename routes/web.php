@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\LocationController;
+use App\Http\Controllers\PantryItemController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -24,4 +27,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    Route::resource('pantry', PantryItemController::class)->parameters([
+        'pantry' => 'pantryItem',
+    ]);
+
+    Route::resource('categories', CategoryController::class)->except(['show']);
+    Route::resource('locations', LocationController::class)->except(['show']);
 });
