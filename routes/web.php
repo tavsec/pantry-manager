@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\PantryItemController;
+use App\Http\Controllers\PantryLogController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -31,6 +32,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('pantry', PantryItemController::class)->parameters([
         'pantry' => 'pantryItem',
     ]);
+
+    Route::get('/pantry-logs', [PantryLogController::class, 'index'])->name('pantry-logs.index');
+    Route::post('/pantry/{pantryItem}/log', [PantryLogController::class, 'store'])->name('pantry.log.store');
 
     Route::resource('categories', CategoryController::class)->except(['show']);
     Route::resource('locations', LocationController::class)->except(['show']);

@@ -155,17 +155,27 @@
                             </div>
 
                             <!-- Actions -->
-                            <div class="mt-4 flex space-x-2">
-                                <a href="{{ route('pantry.edit', $item) }}" class="flex-1 inline-flex justify-center items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                    Edit
-                                </a>
-                                <form action="{{ route('pantry.destroy', $item) }}" method="POST" class="flex-1" onsubmit="return confirm('Are you sure you want to delete this item?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="w-full inline-flex justify-center items-center px-3 py-2 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                        Delete
+                            <div class="mt-4 space-y-2">
+                                <div class="flex space-x-2">
+                                    <button onclick="openLogModal({{ $item->id }}, '{{ $item->name }}', {{ $item->quantity }}, '{{ $item->unit }}')" class="flex-1 inline-flex justify-center items-center px-3 py-2 border border-indigo-300 shadow-sm text-sm font-medium rounded-lg text-indigo-700 bg-indigo-50 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        <svg class="-ml-1 mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                        </svg>
+                                        Log Usage
                                     </button>
-                                </form>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <a href="{{ route('pantry.edit', $item) }}" class="flex-1 inline-flex justify-center items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        Edit
+                                    </a>
+                                    <form action="{{ route('pantry.destroy', $item) }}" method="POST" class="flex-1" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="w-full inline-flex justify-center items-center px-3 py-2 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -195,4 +205,81 @@
         @endif
     </div>
 </div>
+
+<!-- Log Usage Modal -->
+<div id="logModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+    <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-lg bg-white">
+        <div class="mt-3">
+            <h3 class="text-lg font-medium leading-6 text-gray-900 mb-4">Log Usage for <span id="modalItemName"></span></h3>
+
+            <form id="logForm" method="POST" action="">
+                @csrf
+
+                <div class="space-y-4">
+                    <!-- Action -->
+                    <div>
+                        <label for="action" class="block text-sm font-medium text-gray-700">Action *</label>
+                        <select name="action" id="action" required class="mt-1 block w-full px-4 py-3 rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                            <option value="">Select action</option>
+                            <option value="consumed">Consumed</option>
+                            <option value="wasted">Wasted</option>
+                            <option value="expired">Expired</option>
+                            <option value="added">Added More</option>
+                        </select>
+                    </div>
+
+                    <!-- Quantity -->
+                    <div>
+                        <label for="quantity" class="block text-sm font-medium text-gray-700">Quantity *</label>
+                        <div class="mt-1 flex items-center space-x-2">
+                            <input type="number" name="quantity" id="quantity" step="0.01" min="0.01" required class="block w-full px-4 py-3 rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                            <span id="modalUnit" class="text-sm text-gray-600"></span>
+                        </div>
+                        <p class="mt-1 text-xs text-gray-500">Available: <span id="modalQuantity"></span> <span id="modalUnit2"></span></p>
+                    </div>
+
+                    <!-- Notes -->
+                    <div>
+                        <label for="notes" class="block text-sm font-medium text-gray-700">Notes</label>
+                        <textarea name="notes" id="notes" rows="3" class="mt-1 block w-full px-4 py-3 rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Optional notes..."></textarea>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex space-x-3">
+                    <button type="button" onclick="closeLogModal()" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Cancel
+                    </button>
+                    <button type="submit" class="flex-1 px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Log
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function openLogModal(itemId, itemName, quantity, unit) {
+    document.getElementById('logModal').classList.remove('hidden');
+    document.getElementById('modalItemName').textContent = itemName;
+    document.getElementById('modalQuantity').textContent = quantity;
+    document.getElementById('modalUnit').textContent = unit;
+    document.getElementById('modalUnit2').textContent = unit;
+    document.getElementById('logForm').action = '/pantry/' + itemId + '/log';
+
+    // Reset form
+    document.getElementById('logForm').reset();
+}
+
+function closeLogModal() {
+    document.getElementById('logModal').classList.add('hidden');
+}
+
+// Close modal when clicking outside
+document.getElementById('logModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeLogModal();
+    }
+});
+</script>
 @endsection
