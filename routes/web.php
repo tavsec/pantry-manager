@@ -9,7 +9,11 @@ use App\Http\Controllers\PantryLogController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    if (auth()->check()) {
+        return redirect()->route('dashboard');
+    }
+
+    return redirect()->route('login');
 });
 
 // Guest routes (only accessible when not authenticated)
