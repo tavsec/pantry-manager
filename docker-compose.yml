@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  pantry-manager:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: pantry-manager:latest
+    container_name: pantry-manager
+    ports:
+      - "8080:80"
+    volumes:
+      # Persist database
+      - pantry-data:/var/www/html/database
+      # Persist uploaded photos and storage
+      - pantry-storage:/var/www/html/storage/app
+    environment:
+      - APP_NAME=Pantry Manager
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - APP_URL=http://localhost:8080
+      - DB_CONNECTION=sqlite
+      - DB_DATABASE=/var/www/html/database/database.sqlite
+      - LOG_LEVEL=info
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  pantry-data:
+    driver: local
+  pantry-storage:
+    driver: local
