@@ -33,6 +33,16 @@ mkdir -p storage/framework/sessions \
          storage/app/public/pantry-photos \
          bootstrap/cache
 
+# Ensure Nginx temporary directories exist with correct permissions
+echo "Setting up Nginx temporary directories..."
+mkdir -p /var/lib/nginx/tmp/client_body \
+         /var/lib/nginx/tmp/proxy \
+         /var/lib/nginx/tmp/fastcgi \
+         /var/lib/nginx/tmp/uwsgi \
+         /var/lib/nginx/tmp/scgi
+chown -R www-data:www-data /var/lib/nginx/tmp
+chmod -R 775 /var/lib/nginx/tmp
+
 # Set permissions (running as root before supervisord starts)
 chown -R www-data:www-data storage bootstrap/cache database .env
 chmod -R 775 storage bootstrap/cache database

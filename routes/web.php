@@ -30,7 +30,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
 
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        $recentItems = auth()->user()->pantryItems()
+            ->with(['category', 'location'])
+            ->latest()
+            ->limit(5)
+            ->get();
+
+        return view('dashboard', compact('recentItems'));
     })->name('dashboard');
 
     Route::resource('pantry', PantryItemController::class)->parameters([
