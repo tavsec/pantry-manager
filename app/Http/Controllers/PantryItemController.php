@@ -126,6 +126,14 @@ class PantryItemController extends Controller
     {
         $data = $request->validated();
 
+        // Handle photo removal
+        if ($request->input('remove_photo')) {
+            if ($pantryItem->photo_path) {
+                Storage::disk('public')->delete($pantryItem->photo_path);
+                $data['photo_path'] = null;
+            }
+        }
+
         // Handle photo upload
         if ($request->hasFile('photo')) {
             // Delete old photo if exists

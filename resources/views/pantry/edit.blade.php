@@ -37,9 +37,17 @@
             <div class="space-y-6">
                 <!-- Current Photo -->
                 @if ($pantryItem->photo_path)
-                    <div>
+                    <div id="currentPhotoContainer">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Current Photo</label>
-                        <img src="{{ asset('storage/' . $pantryItem->photo_path) }}" alt="{{ $pantryItem->name }}" class="h-32 w-32 object-cover rounded-lg">
+                        <div class="relative inline-block">
+                            <img id="currentPhoto" src="{{ asset('storage/' . $pantryItem->photo_path) }}" alt="{{ $pantryItem->name }}" class="h-48 w-48 object-cover rounded-lg border-2 border-gray-300">
+                        </div>
+                        <div class="mt-2">
+                            <label class="inline-flex items-center cursor-pointer">
+                                <input type="checkbox" name="remove_photo" id="remove_photo" value="1" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" onchange="togglePhotoRemoval()">
+                                <span class="ml-2 text-sm text-gray-600">Remove this photo</span>
+                            </label>
+                        </div>
                     </div>
                 @endif
 
@@ -152,7 +160,20 @@
                 <!-- Photo Upload -->
                 <div>
                     <label for="photo" class="block text-sm font-medium text-gray-700">Update Photo</label>
-                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg">
+
+                    <!-- New Photo Preview Container -->
+                    <div id="newPhotoPreviewContainer" class="hidden mt-2 mb-4">
+                        <div class="relative inline-block">
+                            <img id="newPhotoPreview" src="" alt="Preview" class="h-48 w-48 object-cover rounded-lg border-2 border-gray-300">
+                            <button type="button" onclick="clearNewPhotoPreview()" class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="photoUploadArea" class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg">
                         <div class="space-y-1 text-center">
                             <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
                                 <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -160,7 +181,7 @@
                             <div class="flex text-sm text-gray-600">
                                 <label for="photo" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
                                     <span>Upload a file</span>
-                                    <input id="photo" name="photo" type="file" accept="image/*" class="sr-only">
+                                    <input id="photo" name="photo" type="file" accept="image/*" class="sr-only" onchange="previewNewPhoto(event)">
                                 </label>
                                 <p class="pl-1">or drag and drop</p>
                             </div>
@@ -179,4 +200,45 @@
         </form>
     </div>
 </div>
+
+<script>
+function previewNewPhoto(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('newPhotoPreview').src = e.target.result;
+            document.getElementById('newPhotoPreviewContainer').classList.remove('hidden');
+            document.getElementById('photoUploadArea').classList.add('hidden');
+
+            // Uncheck remove photo checkbox if it was checked
+            const removeCheckbox = document.getElementById('remove_photo');
+            if (removeCheckbox) {
+                removeCheckbox.checked = false;
+            }
+        }
+        reader.readAsDataURL(file);
+    }
+}
+
+function clearNewPhotoPreview() {
+    document.getElementById('photo').value = '';
+    document.getElementById('newPhotoPreview').src = '';
+    document.getElementById('newPhotoPreviewContainer').classList.add('hidden');
+    document.getElementById('photoUploadArea').classList.remove('hidden');
+}
+
+function togglePhotoRemoval() {
+    const removeCheckbox = document.getElementById('remove_photo');
+    const currentPhoto = document.getElementById('currentPhoto');
+
+    if (removeCheckbox.checked) {
+        currentPhoto.style.opacity = '0.3';
+        currentPhoto.style.filter = 'grayscale(100%)';
+    } else {
+        currentPhoto.style.opacity = '1';
+        currentPhoto.style.filter = 'none';
+    }
+}
+</script>
 @endsection

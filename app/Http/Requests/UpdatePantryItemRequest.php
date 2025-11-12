@@ -11,7 +11,7 @@ class UpdatePantryItemRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->id === $this->route('pantry_item')->user_id;
+        return $this->user()->id === $this->route('pantryItem')->user_id;
     }
 
     /**
