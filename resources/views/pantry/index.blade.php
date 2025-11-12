@@ -10,7 +10,21 @@
                     My Pantry
                 </h1>
             </div>
-            <div class="mt-4 flex md:mt-0 md:ml-4">
+            <div class="mt-4 flex gap-2 md:mt-0 md:ml-4">
+                <!-- View Toggle -->
+                <div class="inline-flex rounded-lg border border-gray-300 bg-white">
+                    <button type="button" id="cardViewBtn" onclick="switchView('card')" class="px-3 py-2 text-sm font-medium text-gray-700 rounded-l-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+                        </svg>
+                    </button>
+                    <button type="button" id="listViewBtn" onclick="switchView('list')" class="px-3 py-2 text-sm font-medium text-gray-700 rounded-r-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+
                 <a href="{{ route('pantry.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
@@ -93,9 +107,10 @@
             </form>
         </div>
 
-        <!-- Items Grid -->
+        <!-- Items Display -->
         @if ($items->count() > 0)
-            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <!-- Card View -->
+            <div id="cardView" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 @foreach ($items as $item)
                     <div class="bg-white overflow-hidden shadow-sm rounded-lg hover:shadow-md transition-shadow">
                         <!-- Expiration Status Bar -->
@@ -182,6 +197,120 @@
                 @endforeach
             </div>
 
+            <!-- List View -->
+            <div id="listView" class="hidden bg-white shadow-sm rounded-lg overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Item
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Category
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Location
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Quantity
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Expiration
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Status
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @foreach ($items as $item)
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div>
+                                                <div class="text-sm font-medium text-gray-900">{{ $item->name }}</div>
+                                                @if ($item->notes)
+                                                    <div class="text-sm text-gray-500 truncate max-w-xs">{{ Str::limit($item->notes, 50) }}</div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        @if ($item->category)
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                                                {{ $item->category->icon }} {{ $item->category->name }}
+                                            </span>
+                                        @else
+                                            <span class="text-sm text-gray-400">—</span>
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                        @if ($item->location)
+                                            <span>{{ $item->location->icon }} {{ $item->location->name }}</span>
+                                        @else
+                                            <span class="text-gray-400">—</span>
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ $item->quantity }} {{ $item->unit }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                        @if ($item->expiration_date)
+                                            <div>{{ $item->expiration_date->format('M d, Y') }}</div>
+                                            <div class="text-xs text-gray-500">{{ $item->expiration_date->diffForHumans() }}</div>
+                                        @else
+                                            <span class="text-gray-400">—</span>
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        @if ($item->expiration_status === 'expired')
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                                Expired
+                                            </span>
+                                        @elseif ($item->expiration_status === 'expiring-soon')
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+                                                Expiring Soon
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                Fresh
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <div class="flex justify-end gap-2">
+                                            <button onclick="openLogModal({{ $item->id }}, '{{ $item->name }}', {{ $item->quantity }}, '{{ $item->unit }}')" class="text-indigo-600 hover:text-indigo-900" title="Log Usage">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                                </svg>
+                                            </button>
+                                            <a href="{{ route('pantry.edit', $item) }}" class="text-gray-600 hover:text-gray-900" title="Edit">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                                </svg>
+                                            </a>
+                                            <form action="{{ route('pantry.destroy', $item) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-red-600 hover:text-red-900" title="Delete">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <!-- Pagination -->
             <div class="mt-6">
                 {{ $items->links() }}
@@ -259,6 +388,39 @@
 </div>
 
 <script>
+// View switching functionality
+function switchView(viewType) {
+    const cardView = document.getElementById('cardView');
+    const listView = document.getElementById('listView');
+    const cardBtn = document.getElementById('cardViewBtn');
+    const listBtn = document.getElementById('listViewBtn');
+
+    if (viewType === 'card') {
+        cardView.classList.remove('hidden');
+        listView.classList.add('hidden');
+        cardBtn.classList.add('bg-indigo-100', 'text-indigo-700');
+        cardBtn.classList.remove('text-gray-700');
+        listBtn.classList.remove('bg-indigo-100', 'text-indigo-700');
+        listBtn.classList.add('text-gray-700');
+    } else {
+        cardView.classList.add('hidden');
+        listView.classList.remove('hidden');
+        listBtn.classList.add('bg-indigo-100', 'text-indigo-700');
+        listBtn.classList.remove('text-gray-700');
+        cardBtn.classList.remove('bg-indigo-100', 'text-indigo-700');
+        cardBtn.classList.add('text-gray-700');
+    }
+
+    // Save preference to localStorage
+    localStorage.setItem('pantryViewPreference', viewType);
+}
+
+// Load saved view preference on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const savedView = localStorage.getItem('pantryViewPreference') || 'card';
+    switchView(savedView);
+});
+
 function openLogModal(itemId, itemName, quantity, unit) {
     document.getElementById('logModal').classList.remove('hidden');
     document.getElementById('modalItemName').textContent = itemName;

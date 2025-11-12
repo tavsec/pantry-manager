@@ -30,6 +30,7 @@ mkdir -p storage/framework/sessions \
          storage/framework/cache/data \
          storage/logs \
          storage/app/public \
+         storage/app/public/pantry-photos \
          bootstrap/cache
 
 # Set permissions (running as root before supervisord starts)
@@ -45,6 +46,17 @@ su-exec www-data php artisan migrate --force --no-interaction
 if [ ! -L public/storage ]; then
     echo "Creating storage symlink..."
     su-exec www-data php artisan storage:link --no-interaction
+fi
+
+# Verify storage is writable
+echo "Verifying storage permissions..."
+if su-exec www-data test -w storage/app/public/pantry-photos; then
+    echo "✓ Storage directory is writable"
+else
+    echo "✗ WARNING: Storage directory is not writable!"
+    echo "  Attempting to fix permissions..."
+    chown -R www-data:www-data storage/app/public/pantry-photos
+    chmod -R 775 storage/app/public/pantry-photos
 fi
 
 # Clear and cache configuration
